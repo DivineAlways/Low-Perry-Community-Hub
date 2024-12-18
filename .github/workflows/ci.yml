@@ -1,39 +1,10 @@
-name: CI Pipeline  # Workflow name
+- name: Install Python
+  uses: actions/setup-python@v3
+  with:
+    python-version: '3.9'
 
-on: 
-  push:            # Trigger workflow on code push
-    branches:
-      - main        # Run only on the main branch
+- name: Install dependencies
+  run: pip install -r requirements.txt
 
-jobs:
-  build:           # Job 1: Build the project
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3   # GitHub-provided action to clone your code
-
-      - name: Set up Node.js        # Set up Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install dependencies  # Run shell commands
-        run: |
-          npm install
-          echo "Dependencies installed!"
-
-      - name: Run tests
-        run: |
-          echo "Running tests..."
-          npm test
-  
-  deploy:           # Job 2: Deploy if tests pass
-    runs-on: ubuntu-latest
-    needs: build    # Only runs if 'build' job succeeds
-
-    steps:
-      - name: Deploy app
-        run: |
-          echo "Deploying the application..."
-          # Add deployment commands here
+- name: Run tests
+  run: pytest
