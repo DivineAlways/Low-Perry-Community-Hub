@@ -1,29 +1,26 @@
-name: CI Pipeline  # Workflow name
+name: CI Pipeline  # Name of the workflow
 
 on:
-  push:            # Trigger workflow on code push
+  push:            # Trigger workflow on push
     branches:
-      - main       # Runs only on the 'main' branch
+      - main
 
 jobs:
-  build:           # Job 1: Build the project
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code       # Step 1: Pull the latest code
+      - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Node.js      # Step 2: Install Node.js
-        uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use the GitHub token for access
 
-      - name: Install dependencies  # Step 3: Install project dependencies
+      - name: Install dependencies
         run: |
+          echo "Installing dependencies..."
           npm install
-          echo "Dependencies installed!"
 
-      - name: Run tests           # Step 4: Run tests
+      - name: Run tests
         run: |
           echo "Running tests..."
-          npm test                # Replace with real test command
+          npm test
